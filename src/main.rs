@@ -1,3 +1,4 @@
+use std::env::args;
 use rand::seq::{IteratorRandom, SliceRandom};
 use rodio::{source::Source, Decoder, OutputStream};
 use std::fs;
@@ -22,12 +23,12 @@ impl Prophet{
 
 fn main() -> io::Result<()> {
 
-    let conf_file = "dracula.conf";
+    let args: Vec<String> = args().collect();
 
     let config_dir = "/home/jayson/prophet/config/";
     let sfx_dir = "/home/jayson/prophet/sfx/";
 
-    let config = config_dir.to_string() + conf_file;
+    let config = config_dir.to_string() + &args[1] + ".conf";
 
     let f = fs::File::open(config)?;
     let r = io::BufReader::new(f);
@@ -36,7 +37,7 @@ fn main() -> io::Result<()> {
 
     let mut prophet = Prophet::init(conf_lines);
 
-    prophet.script = config_dir.to_owned() + &prophet.script;
+    prophet.script = config_dir.to_owned() + &prophet.script + ".txt";
     prophet.sfx = sfx_dir.to_owned() + &prophet.sfx;
 
     let _sfx = set_sfx(prophet.sfx);
