@@ -1,6 +1,6 @@
 use std::error::Error;
 
-struct Character {
+pub struct Prophet {
 
     name: String,
     delay: u64

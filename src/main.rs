@@ -1,3 +1,5 @@
+pub mod prophet;
+
 use rand::seq::{IteratorRandom, SliceRandom};
 use rodio::{source::Source, Decoder, OutputStream};
 use std::fs;

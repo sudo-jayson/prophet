@@ -1,6 +1,6 @@
 [package]
-name = "draculations"
-version = "0.3.4"
+name = "prophet"
+version = "0.3.6"
 edition = "2021"
 
 [dependencies]
