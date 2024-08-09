@@ -1,28 +1,14 @@
-use std::env::args;
-use rand::seq::{IteratorRandom, SliceRandom};
+#![allow(dead_code)]
+
+mod prophet;
+
+use rand::seq::SliceRandom;
 use rodio::{source::Source, Decoder, OutputStream};
+use std::env::args;
 use std::fs;
 use std::io::{self, stdout, BufRead, BufReader, Write};
 
-
-struct Prophet{
-    script: String,
-    sfx: String,
-    delay: u64,
-}
-
-impl Prophet{
-    fn init(lines: Vec<String>) -> Self{
-        Prophet{
-            script: lines.get(0).cloned().unwrap_or_default(),
-            sfx: lines.get(1).cloned().unwrap_or_default(),
-            delay: lines.get(2).cloned().unwrap_or_default().parse().expect("fuck"),
-        }
-    }
-}
-
 fn main() -> io::Result<()> {
-
     let args: Vec<String> = args().collect();
 
     let config_dir = "/home/jayson/prophet/config/";
@@ -30,46 +16,46 @@ fn main() -> io::Result<()> {
 
     let config = config_dir.to_string() + &args[1] + ".conf";
 
-    let f = fs::File::open(config)?;
-    let r = io::BufReader::new(f);
+    let fil = fs::File::open(config)?;
+    let read = io::BufReader::new(fil);
 
-    let conf_lines: Vec<String> = r.lines().filter_map(Result::ok).collect();
+    let conf_lines: Vec<String> = read.lines().filter_map(Result::ok).collect();
 
-    let mut prophet = Prophet::init(conf_lines);
+    let mut p = prophet::Prophet::init(conf_lines);
 
-    prophet.script = config_dir.to_owned() + &prophet.script + ".txt";
-    prophet.sfx = sfx_dir.to_owned() + &prophet.sfx;
+    p.script = config_dir.to_owned() + &p.script + ".txt";
+    p.sfx = sfx_dir.to_owned() + &p.sfx;
 
-    let _sfx = set_sfx(prophet.sfx);
+    let _sfx = prophet::Prophet::set_sfx(p.sfx);
     let mut rng = rand::thread_rng();
 
-    let full_script = fs::File::open(prophet.script)?;
+    let full_script = fs::File::open(p.script);
+
+    let full_script = match full_script {
+        Ok(file) => file,
+        Err(error) => {
+            panic!("File not found stoopid {error:?}");
+        }
+    };
+
     let reader = io::BufReader::new(full_script);
 
     let lines: Vec<String> = reader.lines().collect::<Result<_, _>>()?;
     let Some(bar) = lines.choose(&mut rng) else {
-        todo!()
+        panic!("OH FUCK WHAT THE HELL DID YOU DO");
     };
-
 
     println!("{}", '\n');
 
     for c in bar.chars() {
         print!("{}", c);
         let _ = stdout().flush();
-        let _ = play_sfx(_sfx.clone(), prophet.delay);
+        let _ = play_sfx(_sfx.clone(), p.delay);
     }
 
     println!("{}", '\n');
 
     Ok(())
-}
-
-fn set_sfx(s: String) -> String {
-    let mut rng = rand::thread_rng();
-    let sounds = fs::read_dir(s).unwrap();
-    let sfx_path = sounds.choose(&mut rng).unwrap().unwrap();
-    return sfx_path.path().display().to_string();
 }
 
 fn play_sfx(_sfx: String, delay: u64) -> io::Result<()> {
