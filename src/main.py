@@ -4,17 +4,19 @@ import time, random, playsound3, os
 def getProphet(question):
     if question == 1:
         return input("Who is speaking?\n")
-    elif question == 2:
-        return input("What sounds?\n")
-    ##Default options for testing and development
-    elif question == 3:
-        return "dracula"
-    elif question == 4:
-        return "undertale"
+    ##Temp default option for testing
+    else:   return "dracula"
 
-##Instantiates the variables for script and sound effects and picks a random sound
-textFile = os.getcwd() + '\\config\\' + getProphet(3) + '.txt'
-sfxDir=os.getcwd() + '\\sfx\\' + getProphet(4)
+##Instantiates the variables for script and sound effects based on config file
+configFile = os.getcwd() + '\\config\\' + getProphet(1) + '.conf'
+with open(configFile, 'r') as f:
+    data = f.read().splitlines()
+    textFile = os.getcwd() + '\\config\\' + data[0] +'.txt'
+    sfxDir = os.getcwd() + '\\sfx\\' +data[1]
+    minDelay = float(data[2])
+    maxDelay = float(data[3])
+
+
 sfxList = os.listdir(sfxDir)
 sfx = sfxDir + "\\" + random.choice(sfxList)
 
@@ -29,7 +31,7 @@ def speak(text):
     for char in text:
         playsound3.playsound(sfx, block=False)
         print(char, end='', flush=True)
-        time.sleep(getDelay())
+        time.sleep(random.uniform(minDelay, maxDelay))
     print()
 
 ##A random delay interval between each printing of letters
