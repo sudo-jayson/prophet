@@ -6,10 +6,15 @@ def getProphet(question):
         return input("Who is speaking?\n")
     elif question == 2:
         return input("What sounds?\n")
+    ##Default options for testing and development
+    elif question == 3:
+        return "dracula"
+    elif question == 4:
+        return "undertale"
 
 ##Instantiates the variables for script and sound effects and picks a random sound
-textFile = os.getcwd() + '\\config\\' + getProphet(1) + '.txt'
-sfxDir=os.getcwd() + '\\sfx\\' + getProphet(2)
+textFile = os.getcwd() + '\\config\\' + getProphet(3) + '.txt'
+sfxDir=os.getcwd() + '\\sfx\\' + getProphet(4)
 sfxList = os.listdir(sfxDir)
 sfx = sfxDir + "\\" + random.choice(sfxList)
 
@@ -32,4 +37,6 @@ def getDelay():
     return random.uniform(0.05, 0.15)
 
 
+print() ##Newlines for formatting
 speak(getText(textFile))
+print()
