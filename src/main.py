@@ -8,7 +8,7 @@ def getProphet(question):
     else:   return "dracula"
 
 ##Instantiates the variables for script and sound effects based on config file
-configFile = os.getcwd() + '\\config\\' + getProphet(1) + '.conf'
+configFile = os.getcwd() + '\\config\\' + getProphet(3) + '.conf'
 with open(configFile, 'r') as f:
     data = f.read().splitlines()
     textFile = os.getcwd() + '\\config\\' + data[0] +'.txt'
@@ -29,8 +29,8 @@ def getText(textFile):
 ##Prints one letter at a time from the selected text and plays the sound effect 
 def speak(text):
     for char in text:
-        playsound3.playsound(sfx, block=False)
         print(char, end='', flush=True)
+        playsound3.playsound(sfx, block=False)
         time.sleep(random.uniform(minDelay, maxDelay))
     print()
 
