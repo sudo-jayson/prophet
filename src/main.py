@@ -16,7 +16,7 @@ with open(configFile, 'r') as f:
     minDelay = float(data[2])
     maxDelay = float(data[3])
 
-
+##Gets list of sounds and picks one at random
 sfxList = os.listdir(sfxDir)
 sfx = sfxDir + "\\" + random.choice(sfxList)
 
@@ -33,11 +33,6 @@ def speak(text):
         print(char, end='', flush=True)
         time.sleep(random.uniform(minDelay, maxDelay))
     print()
-
-##A random delay interval between each printing of letters
-def getDelay():
-    return random.uniform(0.05, 0.15)
-
 
 print() ##Newlines for formatting
 speak(getText(textFile))
