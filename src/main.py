@@ -31,8 +31,8 @@ def speak(text):
     time.sleep(.5)
     for char in text:
         sys.stdout.write(char)
-        sys.stdout.flush()
         playsound3.playsound(sfx, block=False)
+        sys.stdout.flush()
         time.sleep(random.uniform(minDelay, maxDelay))
     print()
 
