@@ -5,7 +5,7 @@ def getProphet(question):
     if question == 1:
         return input("Who is speaking?\n")
     ##Temp default option for testing
-    else:   return "dracula"
+    else:   return "test"
 
 ##Instantiates the variables for script and sound effects based on config file
 configFile = os.getcwd() + '\\config\\' + getProphet(3) + '.conf'
@@ -20,6 +20,9 @@ with open(configFile, 'r') as f:
 sfxList = os.listdir(sfxDir)
 sfx = sfxDir + "\\" + random.choice(sfxList)
 
+sfxName= sfx.split("_")
+print(sfxName[1])
+
 ##Gets location of text file and chooses a line at random from it
 def getText(textFile):
     with open(textFile, 'r', encoding='utf-8') as f:
@@ -28,6 +31,7 @@ def getText(textFile):
 
 ##Prints one letter at a time from the selected text and plays the sound effect 
 def speak(text):
+    time.sleep(maxDelay)
     for char in text:
         print(char, end='', flush=True)
         playsound3.playsound(sfx, block=False)
