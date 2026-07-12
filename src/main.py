@@ -1,4 +1,4 @@
-import time, random, playsound3, os
+import time, random, playsound3, os, sys
 
 ##Takes input from user and uses it to determine which script and shich sounds to use
 def getProphet(question):
@@ -20,9 +20,6 @@ with open(configFile, 'r') as f:
 sfxList = os.listdir(sfxDir)
 sfx = sfxDir + "\\" + random.choice(sfxList)
 
-sfxName= sfx.split("_")
-print(sfxName[1])
-
 ##Gets location of text file and chooses a line at random from it
 def getText(textFile):
     with open(textFile, 'r', encoding='utf-8') as f:
@@ -31,9 +28,10 @@ def getText(textFile):
 
 ##Prints one letter at a time from the selected text and plays the sound effect 
 def speak(text):
-    time.sleep(maxDelay)
+    time.sleep(.5)
     for char in text:
-        print(char, end='', flush=True)
+        sys.stdout.write(char)
+        sys.stdout.flush()
         playsound3.playsound(sfx, block=False)
         time.sleep(random.uniform(minDelay, maxDelay))
     print()
